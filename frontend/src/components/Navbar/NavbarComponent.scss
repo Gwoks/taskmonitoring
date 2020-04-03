@@ -1,0 +1,35 @@
+@import "../../index.scss";
+
+.background {
+  background-color: $white;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  font-size: 0.75rem;
+  color: $black;
+  padding: 0.625rem 1.5625rem;
+}
+
+.navbar-light:hover .navbar-nav:hover .nav-link:hover {
+  color: $black;
+}
+
+.navbar-collapse {
+  margin-right: 1.875rem;
+}
+
+.navbar-brand {
+  margin-left: 1.875rem;
+}
+
+.pb-navbar {
+  padding-bottom: 1.875rem;
+
+  @include tablet {
+    padding-bottom: 2.5rem
+  }
+
+  @include desktop {
+    padding-bottom: 3.125rem
+  }
+}
