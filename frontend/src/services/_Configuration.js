@@ -1,5 +1,5 @@
 const Configuration = Object.freeze({
-    "API_URL": "http://localhost:3000/api/",
+    "API_URL": "https://xcidic-be.herokuapp.com/api/",
     "SIGNIN": "auth/signin",
     "SIGNUP_USER": "auth/signup/user",
     "SIGNUP_MANAGER": "auth/signup/manager",
