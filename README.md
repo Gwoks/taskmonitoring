@@ -1,5 +1,7 @@
 # Task Monitoring
 CRUD React + Nodejs + Express + Mysql + JWT
+Frontend: https://xcidic-fe.herokuapp.com/
+Backend: https://xcidic-be.herokuapp.com/
 
 ----
 
