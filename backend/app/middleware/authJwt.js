@@ -104,13 +104,30 @@ isManagerOrAdmin = (req, res, next) => {
   });
 };
 
+isUserOrManager = (req, res, next) => {
+  User.findByPk(req.userId).then(user => {
+    Role.findOne({ where: { id: user.roleId } }).then(roles => {
+      if (roles.type === RolesEnum.USER || roles.type === RolesEnum.MANAGER) {
+        next();
+        return;
+      } else {
+        res.status(403).send({
+          message: "Require User Or Manager Role!"
+        });
+        return;
+      }
+    });
+  });
+};
+
 const authJwt = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
   isManager: isManager,
   isUser: isUser,
   isUserOrAdmin: isUserOrAdmin,
-  isManagerOrAdmin: isManagerOrAdmin
+  isManagerOrAdmin: isManagerOrAdmin,
+  isUserOrManager: isUserOrManager
 };
 
 module.exports = authJwt;

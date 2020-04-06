@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Table from 'react-bootstrap/Table'
+import Alert from 'react-bootstrap/Alert'
 import './DashboardComponent.scss'
 import UserService from "../../services/UserService";
 import AuthService from "../../services/AuthService";
@@ -11,7 +12,9 @@ export class DashboardComponent extends Component {
 
         this.state = {
             currentUser: AuthService.getCurrentUser(),
-            userList: null
+            userList: null,
+            message: '',
+            isShowWarning: false
         };
     }
 
@@ -22,7 +25,20 @@ export class DashboardComponent extends Component {
                 this.setState({
                     userList: response.data
                 })
-            })
+            },
+                error => {
+                    const resMessage =
+                        (error.response &&
+                            error.response.data &&
+                            error.response.data.message) ||
+                        error.message ||
+                        error.toString();
+
+                    this.setState({
+                        message: resMessage,
+                        isShowWarning: true
+                    });
+                })
         } else {
             let u = [];
             u.push(this.state.currentUser)
@@ -49,10 +65,20 @@ export class DashboardComponent extends Component {
         return result;
     }
 
+    renderWarning = () => {
+        const { message } = this.state;
+        return (
+            <Alert variant={'danger'}>
+                Warning! {message}
+            </Alert>
+        )
+    }
+
     render() {
-        const { userList } = this.state;
+        const { userList, isShowWarning } = this.state;
         return (
             <div className="container">
+                {isShowWarning ? this.renderWarning() : null}
                 <h1>List Users</h1>
                 <Table striped bordered hover>
                     <thead>

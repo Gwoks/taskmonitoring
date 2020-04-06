@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Alert from 'react-bootstrap/Alert'
 import './TaskComponent.scss'
 import AuthService from "../../services/AuthService";
 import TaskService from "../../services/TaskService"
@@ -17,6 +18,8 @@ export class TaskComponent extends Component {
             isShowAllTask: true,
             isUpdateTask: false,
             isAddTask: false,
+            message: '',
+            isShowWarning: false,
             taskDetail: {},
             allTask: []
         };
@@ -44,19 +47,58 @@ export class TaskComponent extends Component {
                 isUpdateTask: false,
                 isAddTask: false,
             })
-        })
+        },
+            error => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                this.setState({
+                    message: resMessage,
+                    isShowWarning: true
+                });
+            })
     }
 
     updateTask = (id, data) => {
         TaskService.updateTask(id, data).then(response => {
             this.getAllTask()
-        })
+        },
+            error => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                this.setState({
+                    message: resMessage,
+                    isShowWarning: true
+                });
+            })
     }
 
     createTask = (data) => {
         TaskService.createTask(data).then(response => {
             this.getAllTask()
-        })
+        },
+            error => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                this.setState({
+                    message: resMessage,
+                    isShowWarning: true
+                });
+            })
     }
 
     findOneTask = (id) => {
@@ -66,7 +108,20 @@ export class TaskComponent extends Component {
                 isShowAllTask: false,
                 isUpdateTask: true,
                 isAddTask: false,
-            })
+            },
+                error => {
+                    const resMessage =
+                        (error.response &&
+                            error.response.data &&
+                            error.response.data.message) ||
+                        error.message ||
+                        error.toString();
+
+                    this.setState({
+                        message: resMessage,
+                        isShowWarning: true
+                    });
+                })
         })
     }
 
@@ -83,7 +138,20 @@ export class TaskComponent extends Component {
         data.userId = this.state.id
         TaskService.remove(id).then(r => {
             this.getAllTask(this.state.id)
-        })
+        },
+            error => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                this.setState({
+                    message: resMessage,
+                    isShowWarning: true
+                });
+            })
     }
 
     taskTable = () => {
@@ -186,16 +254,26 @@ export class TaskComponent extends Component {
                     <Form.Control as="textarea" rows="3" placeholder=" Description"
                         onChange={onDescriptionChange} />
                     <br />
-                    <Button variant="primary" size="lg" block onClick={() => formUpdate(value)}>Update</Button>
+                    <Button variant="primary" size="lg" block onClick={() => formUpdate(value)}>Add Task</Button>
                 </Form.Group>
             </div>
         )
     }
 
+    renderWarning = () => {
+        const { message } = this.state;
+        return (
+            <Alert variant={'danger'}>
+                Warning! {message}
+            </Alert>
+        )
+    }
+
     render() {
-        const { isShowAllTask, isUpdateTask, isAddTask } = this.state;
+        const { isShowAllTask, isUpdateTask, isAddTask, isShowWarning } = this.state;
         return (
             <div className="container">
+                {isShowWarning ? this.renderWarning() : null}
                 <h1>Task Monitoring</h1>
                 <Button variant="primary" onClick={() => this.addTask()}>Add Task</Button>
                 {isShowAllTask ? this.renderAllTask() : null}

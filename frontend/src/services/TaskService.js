@@ -4,7 +4,7 @@ import Configuration from "./_Configuration";
 
 class TaskService {
     getAllTask(data) {
-        return axios.get(Configuration.API_URL + Configuration.TASKS, { userId: data }, { headers: AuthHeader() });
+        return axios.post(Configuration.API_URL + Configuration.TASKS + '/all', { userId: data }, { headers: AuthHeader() });
     }
 
     createTask(data) {
@@ -16,7 +16,7 @@ class TaskService {
     }
 
     findOne(id) {
-        return axios.get(Configuration.API_URL + Configuration.TASKS + '/' + id, { headers: AuthHeader() });
+        return axios.post(Configuration.API_URL + Configuration.TASKS + '/' + id, { headers: AuthHeader() });
     }
 
     remove(id) {
