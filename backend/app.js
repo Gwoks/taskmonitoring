@@ -9,9 +9,23 @@ const isDropDb = process.env.IS_DROP_DB || false;
 const app = express();
 
 var corsOptions = {
-    origin: process.env.CORS_ORIGIN
+    origin: [process.env.CORS_ORIGIN,
+    process.env.CORS_ORIGIN_WEB],
+    allowedHeaders: [
+        "Content-Type",
+        "Authorization",
+        "Access-Control-Allow-Methods",
+        "Access-Control-Request-Headers",
+        "x-access-token"
+    ],
+    credentials: true,
+    enablePreflight: true
 };
-
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
